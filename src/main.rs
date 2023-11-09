@@ -7,7 +7,24 @@ use xml::reader::{EventReader, XmlEvent};
 // See: https://github.com/kornelski/xml-rs
 
 fn main() -> std::io::Result<()> {
-    let file = File::open("./examples/demo1.xml")?;
+
+    let result = parse_xml_document("./examples/demo1.xml");
+
+    match result {
+        // Ok() =>{
+
+        // }
+        Err(e) => {
+            eprintln!("Error: {e}");
+        }
+        _ => {}
+    }
+
+    Ok(())
+}
+
+fn parse_xml_document( file_path: &str ) -> std::io::Result<()> {
+    let file = File::open(file_path)?;
     let file = BufReader::new(file); // Buffering is important for performance
 
     let parser = EventReader::new(file);
