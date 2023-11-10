@@ -1,3 +1,4 @@
+use std::fs;
 use std::fs::File;
 use std::io::BufReader;
 
@@ -8,20 +9,28 @@ use xml::reader::{EventReader, XmlEvent};
 
 fn main() -> std::io::Result<()> {
 
-    let result = parse_xml_document("./examples/demo1.xml");
+    let paths = fs::read_dir("/mnt/d/sandbox/rust/wso2parser/examples").unwrap();
 
-    match result {
-        // Ok() =>{
+    for path in paths {
+        let name = path.unwrap().path().display().to_string();
+        println!("Name: {} =================================", name);
 
-        // }
-        Err(e) => {
-            eprintln!("Error: {e}");
+        let result = parse_xml_document(name.as_str());
+
+        match result {
+            Ok(()) =>{
+                println!("End of: {} ---------------------------------", name);
+            }
+            Err(e) => {
+                eprintln!("Error: {e}");
+            }
+            // _ => {}
         }
-        _ => {}
     }
 
     Ok(())
 }
+
 
 fn parse_xml_document( file_path: &str ) -> std::io::Result<()> {
     let file = File::open(file_path)?;
